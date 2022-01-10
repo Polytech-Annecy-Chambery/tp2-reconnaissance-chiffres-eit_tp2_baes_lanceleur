@@ -12,5 +12,13 @@ def lecture_modeles(chemin_dossier):
 
 
 def reconnaissance_chiffre(image, liste_modeles, S):
+    image_binarisee = image.binarisation(S)
+    image_localisation = image_binarisee.localisation()
+    simil = 0
+    for i in range(0,9):
+        image_resize = image_localisation.resize(liste_modeles[i].H,liste_modeles[i].W)
+        simil = int(image_resize.similitude(liste_modeles[i]))
+        if simil == 1:
+            return i
     pass
 
