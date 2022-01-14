@@ -47,7 +47,15 @@ class Image:
     #   on retourne une nouvelle image binarisee
     #==============================================================================
     def binarisation(self, S):
-        pass
+        im_bin = Image()
+        im_bin.set_pixels(np.zeros((self.H, self.W), dtype=np.uint8))
+        for x in range(self.H):
+            for y in range(self.W):
+                if self.pixels[x][y] > S:
+                    im_bin.pixels[x][y] = 255
+                elif self.pixels[x][y] <= S:
+                    im_bin.pixels[x][y] = 0
+        return im_bin
 
 
     #==============================================================================
@@ -59,18 +67,53 @@ class Image:
     #   on retourne une nouvelle image recadree
     #==============================================================================
     def localisation(self):
-        pass
+        image = Image()
+        image.set_pixels(self.pixels)
+        lmin = 0 
+        lmax = 0
+        cmin = 0
+        cmax = 0
+        for x in range(self.H):
+            for y in range(self.W):
+                if self.pixels[x][y] == 0:
+                    lmax = x+1
+        for y in range(self.W):
+            for x in range(self.H):
+                if self.pixels[x][y] == 0:
+                    cmax = y+1
+        for x in range(self.H-1,0,-1):
+            for y in range(self.W-1,0,-1):
+                if self.pixels[x][y] == 0:
+                    lmin = x
+        for y in range(self.W-1,0,-1):
+            for x in range(self.H-1,0,-1):
+                if self.pixels[x][y] == 0:
+                    cmin = y
+    
+        image.pixels = image.pixels[lmin:lmax,cmin:cmax]
+        return image
 
     #==============================================================================
     # Methode de redimensionnement d'image
     #==============================================================================
     def resize(self, new_H, new_W):
-        pass
+        image = Image()
+        image.set_pixels(self.pixels)
+        image.pixels = resize(image.pixels, (new_H,new_W), 0)
+        image.H = new_H
+        image.W = new_W
+        return image
 
 
     #==============================================================================
     # Methode de mesure de similitude entre l'image self et un modele im
     #==============================================================================
     def similitude(self, im):
-        pass
+        erreur = 0.0
+        for x in range(self.H):
+            for y in range(self.W):
+                if self.pixels[x][y] != im.pixels[x][y]:
+                    erreur += 1.0 
+        erreur = 1.0 - erreur/(self.H*self.W)
+        return erreur
 
