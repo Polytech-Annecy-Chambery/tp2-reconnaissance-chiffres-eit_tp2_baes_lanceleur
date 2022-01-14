@@ -46,7 +46,7 @@ class Image:
     #   S : le seuil de binarisation
     #   on retourne une nouvelle image binarisee
     #==============================================================================
-   def binarisation(self, S):
+    def binarisation(self, S):
         im_bin = Image()
         im_bin.set_pixels(np.zeros((self.H, self.W), dtype=np.uint8))
         for x in range(self.H):
